@@ -1,0 +1,14 @@
+name: 'Firestore Data'
+description: 'Read or write data from Firestore'
+inputs:
+  path:  # id of input
+    description: 'Path to read or write'
+    required: true
+  value:  # id of input
+    description: 'Value to read or write (optional)'
+outputs:
+  value: # id of output
+    description: 'Value at path after action'
+runs:
+  using: 'node16'
+  main: 'index.js'
