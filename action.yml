@@ -1,10 +1,16 @@
 name: 'Firestore Data'
 description: 'Read or write data from Firestore'
 inputs:
-  path:  # id of input
+  firebaseServiceAccount:  # id of input
+    description: 'Firebase service account JSON'
+    required: true
+  path:
     description: 'Path to read or write'
     required: true
-  value:  # id of input
+  key:
+    description: 'Key on document to read or write'
+    required: true
+  value:
     description: 'Value to read or write (optional)'
 outputs:
   value: # id of output
