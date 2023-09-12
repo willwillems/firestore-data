@@ -1,15 +1,6 @@
-const {Firestore} = require('@google-cloud/firestore')
 const core = require('@actions/core')
-// const github = require('@actions/github')
-
 const createGacFile = require('./adc.js')
-
-const projectId = process.env['GCLOUD_PROJECT']
-
-const keyFilename = createGacFile(core.getInput('firebaseServiceAccount'))
-
-
-const firestore = new Firestore({ projectId, keyFilename })
+const data = require('./data.js')
 
 
 main().catch(handleError)
@@ -21,18 +12,15 @@ async function main () {
   const value  = core.getInput('value')
   const read   = value === ""
 
-  const document = firestore.doc(path)
+  core.debug("Creating GAC file")
+  const keyFilename = createGacFile(core.getInput('firebaseServiceAccount'))
+  core.debug(`Successfully created GAC file at: ${keyFilename}`)
 
-  if (!read) {
-    await document.set({
-      [key]: value
-    }, { merge: true })
-  }
+  core.debug("Setting/getting Firestore data")
+  const out = await data(keyFilename, path, key, value, read)
+  core.debug(`Successfully set/get Firestore data: ${out}`)
 
-  const doc = await document.get()
-  const data = doc.data()
-
-  core.setOutput("value", data[key])
+  core.setOutput("value", out)
 }
 
 function handleError (error) {
